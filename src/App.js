@@ -3,6 +3,7 @@ import "./App.css";
 import List from "./List";
 import Alert from "./Alert";
 import Header from "./Header";
+import AddTask from "./AddTask";
 import { getLocalStorage } from "./localStorage";
 
 function App() {
@@ -41,26 +42,19 @@ function App() {
   return (
     <section className="section-center">
       <Header />
-      <form className="grocery-form" onSubmit={handleSubmit}>
-        {alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />}
-
-        <div className="form-control">
-          <input
-            type=""
-            className=""
-            placeholder=""
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <button type="submit" className="submit-btn">
-            {isEditing ? "edit" : "submit"}
-          </button>
-        </div>
-      </form>
+      <AddTask
+        name={name}
+        setName={setName}
+        handleSubmit={handleSubmit}
+        isEditing={isEditing}
+      />
+      {alert.show && (
+        <Alert {...alert} removeAlert={() => showAlert()} list={list} />
+      )}
       {list.length > 0 && (
         <div className="grocery-container">
           <List items={list} removeItem={removeItem} editItem={editItem} />
-          <button className="clear-btn" onClick={clearList}>
+          <button className="clear-btn" onClick={clearList} disabled>
             clear items
           </button>
         </div>
