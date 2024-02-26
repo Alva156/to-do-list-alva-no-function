@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css"; // Assuming you use styles defined in App.css
+import "./App.css";
 
 function AddTask({ name, setName, handleSubmit, isEditing }) {
   return (
