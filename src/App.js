@@ -7,8 +7,17 @@ import AddTask from "./AddTask";
 import { getLocalStorage } from "./localStorage";
 
 function App() {
+  const dummyTasks = [
+    { id: "1", title: "Buy Mom and Dad gifts" },
+    { id: "2", title: "Basketball at Kapatiran" },
+    { id: "3", title: "Eat Hard Boiled Eggs" },
+    { id: "4", title: "Basketball at San Mateo" },
+    { id: "5", title: "Sleep @9pm" },
+    { id: "6", title: "Wake up @10am" },
+    { id: "7", title: "Wake up @11am" },
+  ];
   const [name, setName] = useState("");
-  const [list, setList] = useState(getLocalStorage());
+  const [list, setList] = useState(getLocalStorage(dummyTasks));
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({ show: false, type: "", msg: "" });
