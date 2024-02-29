@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 
 function AddTask({ name, setName, handleSubmit, isEditing }) {
   return (
@@ -8,12 +8,12 @@ function AddTask({ name, setName, handleSubmit, isEditing }) {
         <input
           type="text"
           className="task-input"
-          placeholder=""
+          placeholder="Add task"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <button type="submit" className="submit-btn">
-          {isEditing ? "edit" : "submit"}
+          {isEditing ? "Edit" : "Submit"}
         </button>
       </div>
     </form>

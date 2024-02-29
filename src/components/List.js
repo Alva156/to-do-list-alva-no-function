@@ -11,10 +11,11 @@ function List({ items }) {
           <article key={id} className="task-item">
             <p className="title">{title}</p>
             <div className="btn-container">
-              <button className="edit-btn" onClick={() => {}}>
+              <button className="edit-btn">
                 <FaIcons.FaEdit />
               </button>
-              <button className="delete-btn" onClick={() => {}}>
+
+              <button className="delete-btn">
                 <FaIcons.FaTrash />
               </button>
             </div>
