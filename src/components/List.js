@@ -1,8 +1,10 @@
 import React from "react";
 import "./List.css";
-import * as FaIcons from "react-icons/fa";
+import EditTask from "./EditTask";
+import DeleteTask from "./DeleteTask";
+import CheckTask from "./CheckTask";
 
-function List({ items }) {
+function List({ items, removeItem, editItem, checkItem }) {
   return (
     <div className="task-list">
       {items.map((item) => {
@@ -11,13 +13,9 @@ function List({ items }) {
           <article key={id} className="task-item">
             <p className="title">{title}</p>
             <div className="btn-container">
-              <button className="edit-btn">
-                <FaIcons.FaEdit />
-              </button>
-
-              <button className="delete-btn">
-                <FaIcons.FaTrash />
-              </button>
+              <CheckTask checkItem={() => checkItem(id)} />
+              <EditTask editItem={() => editItem(id)} />
+              <DeleteTask removeItem={() => removeItem(id)} />
             </div>
           </article>
         );
