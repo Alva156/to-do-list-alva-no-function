@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./Alert.css";
+import "./components.css";
 
 function Alert({ type, msg, removeAlert, list }) {
   useEffect(() => {
@@ -7,7 +7,7 @@ function Alert({ type, msg, removeAlert, list }) {
       removeAlert();
     }, 2000);
     return () => clearTimeout(timeout);
-  }, [list]);
+  }, [list, removeAlert]);
   return <p className={`alert alert-${type}`}>{msg}</p>;
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import "./List.css";
+import "./components.css";
 import EditTask from "./EditTask";
 import DeleteTask from "./DeleteTask";
 import CheckTask from "./CheckTask";
