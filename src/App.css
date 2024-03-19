@@ -100,7 +100,7 @@ body {
 
 .clear-btn {
   text-transform: capitalize;
-  width: 10rem;
+  width: 20rem;
   height: 1.5rem;
   display: grid;
   align-items: center;

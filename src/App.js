@@ -31,11 +31,18 @@ function App() {
 
   const removeItem = (id) => {
     setList(list.filter((item) => item.id !== id));
-    showAlert(true, "danger", "Item removed");
+    showAlert(true, "danger", "Task removed");
   };
   const checkItem = (id) => {
-    setList(list.filter((item) => item.id !== id));
-    showAlert(true, "success", "Item completed");
+    showAlert(true, "success", "Task completed");
+    setList(
+      list.map((item) => {
+        if (item.id === id) {
+          return { ...item, completed: !item.completed };
+        }
+        return item;
+      })
+    );
   };
 
   const editItem = (id) => {
@@ -47,7 +54,16 @@ function App() {
 
   const clearList = () => {
     setList([]);
-    showAlert(true, "danger", "All entries removed");
+    showAlert(true, "danger", "All tasks removed");
+  };
+  const clearCompletedTasks = () => {
+    const completedTasksExist = list.some((item) => item.completed);
+    if (completedTasksExist) {
+      setList(list.filter((item) => !item.completed));
+      showAlert(true, "success", "Completed tasks cleared");
+    } else {
+      showAlert(true, "danger", "There are no completed tasks");
+    }
   };
 
   const handleSubmit = (e) => {
@@ -66,12 +82,17 @@ function App() {
       setName("");
       setEditID(null);
       setIsEditing(false);
-      showAlert(true, "success", "Item edited");
+      showAlert(true, "success", "Task edited");
     } else {
-      const newItem = { id: new Date().getTime().toString(), title: name };
+      const newItem = {
+        id: new Date().getTime().toString(),
+        title: name,
+        completed: false,
+      };
+
       setList([...list, newItem]);
       setName("");
-      showAlert(true, "success", "Item added to the list");
+      showAlert(true, "success", "Task added to the list");
     }
   };
 
@@ -89,7 +110,7 @@ function App() {
         isEditing={isEditing}
       />
 
-      <TaskCount count={list.length} />
+      <TaskCount list={list} />
 
       {alert.show && (
         <Alert {...alert} removeAlert={() => showAlert()} list={list} />
@@ -103,8 +124,11 @@ function App() {
             checkItem={checkItem}
           />
 
+          <button onClick={clearCompletedTasks} className="clear-btn">
+            Remove All Completed Tasks
+          </button>
           <button className="clear-btn" onClick={clearList}>
-            clear items
+            remove all tasks
           </button>
         </div>
       )}

@@ -99,3 +99,12 @@
   color: white;
   margin-bottom: 2rem;
 }
+
+.task-item.completed {
+  color: white;
+  background: #0f2715;
+  text-decoration: line-through;
+}
+.task-item.completed .title {
+  color: #04fc3d;
+}

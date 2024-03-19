@@ -9,8 +9,12 @@ function List({ items, removeItem, editItem, checkItem }) {
     <div className="task-list">
       {items.map((item) => {
         const { id, title } = item;
+
         return (
-          <article key={id} className="task-item">
+          <article
+            key={id}
+            className={`task-item ${item.completed ? "completed" : ""}`}
+          >
             <p className="title">{title}</p>
             <div className="btn-container">
               <CheckTask checkItem={() => checkItem(id)} />
