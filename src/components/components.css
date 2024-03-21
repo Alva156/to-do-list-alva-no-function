@@ -108,3 +108,9 @@
 .task-item.completed .title {
   color: #04fc3d;
 }
+.task-item.completed .check-btn {
+  color: red;
+}
+.task-item.completed .check-btn :hover {
+  color: red;
+}

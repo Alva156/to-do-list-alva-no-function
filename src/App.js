@@ -4,7 +4,7 @@ import List from "./components/List";
 import Alert from "./components/Alert";
 import Header from "./components/Header";
 import AddTask from "./components/AddTask";
-import TaskCount from "./components/TaskCount";
+import Footer from "./components/Footer";
 
 import { getLocalStorage } from "./localStorage";
 
@@ -20,7 +20,15 @@ function App() {
   // ];
 
   const [name, setName] = useState("");
-  const [list, setList] = useState(getLocalStorage());
+  const [list, setList] = useState(
+    getLocalStorage().sort((a, b) => {
+      if (a.completed === b.completed) {
+        return a.title.localeCompare(b.title);
+      }
+      return a.completed ? -1 : 1;
+    })
+  );
+
   const [alert, setAlert] = useState({ show: false, type: "", msg: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
@@ -30,18 +38,38 @@ function App() {
   };
 
   const removeItem = (id) => {
-    setList(list.filter((item) => item.id !== id));
-    showAlert(true, "danger", "Task removed");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to remove this task?"
+    );
+    if (isConfirmed) {
+      setList(list.filter((item) => item.id !== id));
+      showAlert(true, "danger", "Task removed");
+    }
   };
   const checkItem = (id) => {
-    showAlert(true, "success", "Task completed");
-    setList(
-      list.map((item) => {
-        if (item.id === id) {
-          return { ...item, completed: !item.completed };
-        }
-        return item;
-      })
+    const updatedList = list.map((item) => {
+      if (item.id === id) {
+        return { ...item, completed: !item.completed };
+      }
+      return item;
+    });
+
+    updatedList.sort((a, b) => {
+      if (a.completed === b.completed) {
+        return a.title.localeCompare(b.title);
+      }
+      return a.completed ? -1 : 1;
+    });
+
+    setList(updatedList);
+    showAlert(
+      true,
+      updatedList.find((item) => item.id === id).completed
+        ? "success"
+        : "danger",
+      updatedList.find((item) => item.id === id).completed
+        ? "Task completed"
+        : "Task marked as not complete"
     );
   };
 
@@ -53,14 +81,24 @@ function App() {
   };
 
   const clearList = () => {
-    setList([]);
-    showAlert(true, "danger", "All tasks removed");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to remove all tasks?"
+    );
+    if (isConfirmed) {
+      setList([]);
+      showAlert(true, "danger", "All tasks removed");
+    }
   };
   const clearCompletedTasks = () => {
     const completedTasksExist = list.some((item) => item.completed);
     if (completedTasksExist) {
-      setList(list.filter((item) => !item.completed));
-      showAlert(true, "success", "Completed tasks cleared");
+      const isConfirmed = window.confirm(
+        "Are you sure you want to remove all completed tasks?"
+      );
+      if (isConfirmed) {
+        setList(list.filter((item) => !item.completed));
+        showAlert(true, "success", "Completed tasks cleared");
+      }
     } else {
       showAlert(true, "danger", "There are no completed tasks");
     }
@@ -70,29 +108,35 @@ function App() {
     e.preventDefault();
     if (!name) {
       showAlert(true, "danger", "Please enter value");
-    } else if (name && isEditing) {
-      setList(
-        list.map((item) => {
+    } else {
+      let tempTasks = [];
+      if (isEditing) {
+        tempTasks = list.map((item) => {
           if (item.id === editID) {
             return { ...item, title: name };
           }
           return item;
-        })
-      );
-      setName("");
-      setEditID(null);
-      setIsEditing(false);
-      showAlert(true, "success", "Task edited");
-    } else {
-      const newItem = {
-        id: new Date().getTime().toString(),
-        title: name,
-        completed: false,
-      };
+        });
+        setIsEditing(false);
+      } else {
+        const newTask = {
+          id: new Date().getTime().toString(),
+          title: name,
+          completed: false,
+        };
+        tempTasks = [...list, newTask];
+      }
 
-      setList([...list, newItem]);
+      tempTasks.sort((a, b) => {
+        if (a.completed === b.completed) {
+          return a.title.localeCompare(b.title);
+        }
+        return a.completed ? -1 : 1;
+      });
+
+      setList(tempTasks);
       setName("");
-      showAlert(true, "success", "Task added to the list");
+      showAlert(true, "success", isEditing ? "Task updated" : "Task added");
     }
   };
 
@@ -109,8 +153,6 @@ function App() {
         handleSubmit={handleSubmit}
         isEditing={isEditing}
       />
-
-      <TaskCount list={list} />
 
       {alert.show && (
         <Alert {...alert} removeAlert={() => showAlert()} list={list} />
@@ -130,6 +172,7 @@ function App() {
           <button className="clear-btn" onClick={clearList}>
             remove all tasks
           </button>
+          <Footer list={list} />
         </div>
       )}
     </section>
